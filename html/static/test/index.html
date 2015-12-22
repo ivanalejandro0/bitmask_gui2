@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Cool desktop app</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="main.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+  <div class="fill-height-or-more">
+    <div class='top'>
+          <div class="masthead titlebar">
+            <div class="inner">
+              <h3 class="masthead-brand">Bitmask</h3>
+              <hr />
+              <nav class="nav nav-masthead">
+                <a class="nav-link active" href="#" id='nav-a'>Welcome</a>
+                <a class="nav-link" href="#" id='nav-b'>Login</a>
+                <a class="nav-link" href="#" id='nav-c'>EIP</a>
+              </nav>
+            </div>
+          </div>
+    </div> <!-- top -->
+    <div class='center'>
+
+      <div class="pages">
+
+      <div id='welcome' class='page'>
+        <h1 class="cover-heading">Cover your page.</h1>
+        <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+        <p class="lead">
+          <a href="#" id='learn-more' class="btn btn-lg btn-secondary">Learn more</a>
+        </p>
+      </div>
+
+      <form id="login" class="page hidden">
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 form-control-label">Email</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputPassword3" class="col-sm-2 form-control-label">Password</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-secondary">Sign in</button>
+          </div>
+        </div>
+      </form>
+
+    </div> <!-- pages -->
+
+
+    </div> <!-- center -->
+    <div class='bottom mastfoot'>
+      <p>Status bar at the bottom, always... TODO: put some info here?</p>
+    </div> <!-- bottom -->
+  </div>
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <script type="text/javascript">
+        $('#learn-more, #nav-b').click(function(event){
+            event.preventDefault();
+            $('#welcome').addClass('hidden');
+            $('#login').removeClass('hidden');
+
+            // $("#welcome").toggle("slide", {direction: "left"}, 1200);
+            // $("#login").toggle("slide", {direction: "right"}, 1200);
+
+            $("#welcome").animate({ display: "none" }, 1500 );
+            $("#login").animate({ display: "flex" }, 1500 );
+
+            $('nav.nav-masthead a').removeClass('active');
+            $('#nav-b').addClass('active');
+        });
+        $('#nav-b').click(function(event){
+            event.preventDefault();
+        });
+        $('#nav-c').click(function(event){
+            event.preventDefault();
+        });
+    </script>
+
+
+  </body>
+</html>
