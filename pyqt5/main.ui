@@ -31,7 +31,7 @@
        <widget class="QLineEdit" name="leUsername"/>
       </item>
       <item row="0" column="2">
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="pbLogin">
         <property name="text">
          <string>Login</string>
         </property>
@@ -48,7 +48,7 @@
        <widget class="QLineEdit" name="lePassword"/>
       </item>
       <item row="1" column="2">
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="pbLogout">
         <property name="text">
          <string>Logout</string>
         </property>
@@ -66,21 +66,21 @@
       <item row="0" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="pbStart">
+         <widget class="QPushButton" name="pbEIPStart">
           <property name="text">
            <string>Start</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pbStop">
+         <widget class="QPushButton" name="pbEIPStop">
           <property name="text">
            <string>Stop</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pbStatus">
+         <widget class="QPushButton" name="pbEIPStatus">
           <property name="text">
            <string>Status</string>
           </property>
