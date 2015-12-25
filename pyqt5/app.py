@@ -26,14 +26,20 @@ class Main(QWidget):
         self.ui.pbEIPStart.clicked.connect(self.eip_start)
 
     def eip_start(self):
-        print("EIP: start")
+        print("[UI] EIP: start")
         # self._core_proxy.eip_start()
 
     def user_login(self):
-        print("USER: login")
+        print("[UI] USER: login")
         username = self.ui.leUsername.text()
         password = self.ui.lePassword.text()
         self._core_proxy.user_login(username, password)
+
+    def closeEvent(self, event):
+        print("[UI] closeEvent")
+        self._core_proxy.stop()
+        # event.accept()
+        QWidget.closeEvent(self, event)
 
 
 if __name__ == '__main__':
