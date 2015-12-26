@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import signal
 import sys
 
 from PyQt5.QtWidgets import QApplication, QWidget
@@ -11,7 +12,6 @@ from ui_main import Ui_Main
 
 class Main(QWidget):
     def __init__(self):
-        # super(Main, self).__init__(self)
         QWidget.__init__(self)
         self.ui = Ui_Main()
         self.ui.setupUi(self)
@@ -23,6 +23,7 @@ class Main(QWidget):
 
     def connect_ui(self):
         self.ui.pbLogin.clicked.connect(self.user_login)
+        self.ui.pbLogout.clicked.connect(self.user_logout)
 
         self.ui.pbEIPStart.clicked.connect(self.eip_start)
         self.ui.pbEIPStop.clicked.connect(self.eip_stop)
@@ -33,13 +34,13 @@ class Main(QWidget):
         self.ui.pbMailStatus.clicked.connect(self.mail_status)
 
     def user_login(self):
-        print("[UI] USER: login")
+        print("[UI] User: login")
         username = self.ui.leUsername.text()
         password = self.ui.lePassword.text()
         self._core_proxy.user_login(username, password)
 
     def user_logout(self):
-        print("[UI] USER: logout")
+        print("[UI] User: logout")
         username = self.ui.leUsername.text()
         password = self.ui.lePassword.text()
         self._core_proxy.user_logout(username, password)
@@ -78,4 +79,8 @@ class Main(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     w = Main()
+
+    # Ensure that the application quits using CTRL-C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
     sys.exit(app.exec_())

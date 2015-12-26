@@ -5,13 +5,16 @@ import threading
 import time
 
 import zmq
-from zmq.sugar.constants import NOBLOCK, SNDMORE
+from zmq.sugar.constants import NOBLOCK
 
 
 class Sender():
     """
     Message sender running in a thread, it sends messages to the bitmask
     daemon.
+
+    NOTE: right now this is not very well thought, just the basics to get a
+    simple zmq non twistedy message sender.
     """
 
     # this is defined on bonafide config
@@ -66,11 +69,7 @@ class Sender():
     def _send_request(self, command):
         """
         Rudimentary zmq (non twistedy) multipart message sender.
-        borrowed from:
-        http://txzmq.readthedocs.org/en/latest/_modules/txzmq/connection.html#ZmqConnection.send
 
         :type command: list
         """
-        for part in command[:-1]:
-            self._socket.send(part, NOBLOCK | SNDMORE)
-        self._socket.send(command[-1], NOBLOCK)
+        self._socket.send_multipart(command, NOBLOCK)
