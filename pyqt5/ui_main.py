@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main.ui'
 #
-# Created: Thu Dec 24 12:24:00 2015
+# Created: Sat Dec 26 18:49:27 2015
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,8 +13,8 @@ class Ui_Main(object):
     def setupUi(self, Main):
         Main.setObjectName("Main")
         Main.resize(361, 524)
-        self.gridLayout_3 = QtWidgets.QGridLayout(Main)
-        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.gridLayout_4 = QtWidgets.QGridLayout(Main)
+        self.gridLayout_4.setObjectName("gridLayout_4")
         self.groupBox = QtWidgets.QGroupBox(Main)
         self.groupBox.setObjectName("groupBox")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox)
@@ -37,7 +37,7 @@ class Ui_Main(object):
         self.pbLogout = QtWidgets.QPushButton(self.groupBox)
         self.pbLogout.setObjectName("pbLogout")
         self.gridLayout_2.addWidget(self.pbLogout, 1, 2, 1, 1)
-        self.gridLayout_3.addWidget(self.groupBox, 0, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.groupBox, 0, 0, 1, 1)
         self.gbEIP = QtWidgets.QGroupBox(Main)
         self.gbEIP.setObjectName("gbEIP")
         self.gridLayout = QtWidgets.QGridLayout(self.gbEIP)
@@ -59,9 +59,31 @@ class Ui_Main(object):
         self.lblStatus = QtWidgets.QLabel(self.gbEIP)
         self.lblStatus.setObjectName("lblStatus")
         self.gridLayout.addWidget(self.lblStatus, 1, 0, 1, 1)
-        self.gridLayout_3.addWidget(self.gbEIP, 1, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 309, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_3.addItem(spacerItem1, 2, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.gbEIP, 1, 0, 1, 1)
+        self.gbEIP_2 = QtWidgets.QGroupBox(Main)
+        self.gbEIP_2.setObjectName("gbEIP_2")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.gbEIP_2)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pbMailStart = QtWidgets.QPushButton(self.gbEIP_2)
+        self.pbMailStart.setObjectName("pbMailStart")
+        self.horizontalLayout_2.addWidget(self.pbMailStart)
+        self.pbMailStop = QtWidgets.QPushButton(self.gbEIP_2)
+        self.pbMailStop.setObjectName("pbMailStop")
+        self.horizontalLayout_2.addWidget(self.pbMailStop)
+        self.pbMailStatus = QtWidgets.QPushButton(self.gbEIP_2)
+        self.pbMailStatus.setObjectName("pbMailStatus")
+        self.horizontalLayout_2.addWidget(self.pbMailStatus)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
+        self.gridLayout_3.addLayout(self.horizontalLayout_2, 0, 0, 1, 1)
+        self.lblStatus_2 = QtWidgets.QLabel(self.gbEIP_2)
+        self.lblStatus_2.setObjectName("lblStatus_2")
+        self.gridLayout_3.addWidget(self.lblStatus_2, 1, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.gbEIP_2, 2, 0, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 309, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_4.addItem(spacerItem2, 3, 0, 1, 1)
 
         self.retranslateUi(Main)
         QtCore.QMetaObject.connectSlotsByName(Main)
@@ -79,4 +101,9 @@ class Ui_Main(object):
         self.pbEIPStop.setText(_translate("Main", "Stop"))
         self.pbEIPStatus.setText(_translate("Main", "Status"))
         self.lblStatus.setText(_translate("Main", "Status:"))
+        self.gbEIP_2.setTitle(_translate("Main", "Mail"))
+        self.pbMailStart.setText(_translate("Main", "Start"))
+        self.pbMailStop.setText(_translate("Main", "Stop"))
+        self.pbMailStatus.setText(_translate("Main", "Status"))
+        self.lblStatus_2.setText(_translate("Main", "Status:"))
 

@@ -9,8 +9,12 @@ from zmq.sugar.constants import NOBLOCK, SNDMORE
 
 
 class Sender():
+    """
+    Message sender running in a thread, it sends messages to the bitmask
+    daemon.
+    """
 
-    # from bonafide config
+    # this is defined on bonafide config
     ENDPOINT = "ipc:///tmp/bonafide.sock"
 
     def __init__(self):
