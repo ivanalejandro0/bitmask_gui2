@@ -1,3 +1,2 @@
-PyQt5
+# PyQt5  # this should be symlinked into the venv
 pyzmq
-txzmq
