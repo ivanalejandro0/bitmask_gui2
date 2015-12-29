@@ -69,3 +69,6 @@ class CoreProxy():
 
     def eip_stop(self):
         self._sender.send([b'eip', b'stop'])
+
+    # def eip_status(self):
+    #     self._sender.send([b'eip', b'status'])

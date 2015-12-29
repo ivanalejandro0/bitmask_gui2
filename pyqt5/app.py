@@ -27,7 +27,7 @@ class Main(QWidget):
 
         self.ui.pbEIPStart.clicked.connect(self.eip_start)
         self.ui.pbEIPStop.clicked.connect(self.eip_stop)
-        self.ui.pbEIPStatus.clicked.connect(self.eip_status)
+        # self.ui.pbEIPStatus.clicked.connect(self.eip_status)
 
         self.ui.pbMailStart.clicked.connect(self.mail_start)
         self.ui.pbMailStop.clicked.connect(self.mail_stop)
@@ -47,15 +47,15 @@ class Main(QWidget):
 
     def eip_start(self):
         print("[UI] EIP: start")
-        # self._core_proxy.eip_start()
+        self._core_proxy.eip_start()
 
-    def eip_status(self):
-        print("[UI] EIP: status")
-        # self._core_proxy.eip_status()
+    # def eip_status(self):
+    #     print("[UI] EIP: status")
+    #     self._core_proxy.eip_status()
 
     def eip_stop(self):
         print("[UI] EIP: stop")
-        # self._core_proxy.eip_stop()
+        self._core_proxy.eip_stop()
 
     def mail_start(self):
         print("[UI] Mail: start")
