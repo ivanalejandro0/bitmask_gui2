@@ -5,7 +5,6 @@ import threading
 import time
 
 import zmq
-from zmq.sugar.constants import NOBLOCK
 
 
 class Sender():
@@ -16,6 +15,8 @@ class Sender():
     NOTE: right now this is not very well thought, just the basics to get a
     simple zmq non twistedy message sender.
     """
+    POLL_TRIES = 5
+    POLL_TIMEOUT = 2000  # ms
 
     # this is defined on bonafide config
     ENDPOINT = "ipc:///tmp/bonafide.sock"
@@ -66,10 +67,44 @@ class Sender():
         """
         self._queue.put(cmd)
 
-    def _send_request(self, command):
+    def _send_request(self, request):
         """
-        Rudimentary zmq (non twistedy) multipart message sender.
+        Send the given request to the server.
+        This is used from a thread safe loop in order to avoid sending a
+        request without receiving a response from a previous one.
 
-        :type command: list
+        :param request: the request to send.
+        :type request: list of bytes
         """
-        self._socket.send_multipart(command, NOBLOCK)
+        print("Sender: sending: {0}".format(request))
+        time_a = time.perf_counter()  # time before sending
+        self._socket.send_multipart(request)
+
+        poll = zmq.Poller()
+        poll.register(self._socket, zmq.POLLIN)
+
+        reply = None
+        tries = 0
+
+        while True:
+            socks = dict(poll.poll(self.POLL_TIMEOUT))
+            if socks.get(self._socket) == zmq.POLLIN:
+                reply = self._socket.recv()
+                break
+
+            tries += 1
+            if tries < self.POLL_TRIES:
+                print('Retrying receive... {0}/{1}'.format(
+                    tries, self.POLL_TRIES))
+            else:
+                break
+
+        time_b = time.perf_counter()  # time after sending
+
+        if reply is None:
+            print("Sender: timeout error contacting backend")
+        else:
+            print("Sender: received reply for '{0}' -> '{1}'".format(
+                request, reply))
+
+        print("Sender: elapsed time: {0}".format(time_b - time_a))
