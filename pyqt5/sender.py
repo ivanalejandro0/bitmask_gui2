@@ -15,6 +15,7 @@ class Sender():
     NOTE: right now this is not very well thought, just the basics to get a
     simple zmq non twistedy message sender.
     """
+    # Total wait time == POLL_TIMEOUT * POLL_TRIES (ms)
     POLL_TRIES = 5
     POLL_TIMEOUT = 2000  # ms
 
@@ -25,14 +26,23 @@ class Sender():
         """
         Initialize the ZMQ socket to talk to the signaling server.
         """
+        self._queue = queue.Queue()
+        self._do_work = threading.Event()  # used to stop the worker thread.
+        self._worker_thread = threading.Thread(target=self._worker)
+        self._socket = None
+        self._connect()
+
+    def _connect(self, reconnect=False):
+        """
+        Connect to the core, create a new socket and reconnect if specified.
+        """
+        if self._socket is not None and reconnect:
+            self._socket.setsockopt(zmq.LINGER, 0)
+            self._socket.close()
+
         context = zmq.Context()
         self._socket = context.socket(zmq.REQ)
         self._socket.connect(self.ENDPOINT)
-
-        self._queue = queue.Queue()
-
-        self._do_work = threading.Event()  # used to stop the worker thread.
-        self._worker_thread = threading.Thread(target=self._worker)
 
     def _worker(self):
         """
@@ -103,6 +113,7 @@ class Sender():
 
         if reply is None:
             print("Sender: timeout error contacting backend")
+            self._connect(reconnect=True)  # reconnect to cleanup socket
         else:
             print("Sender: received reply for '{0}' -> '{1}'".format(
                 request, reply))
