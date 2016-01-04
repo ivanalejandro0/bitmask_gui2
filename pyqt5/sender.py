@@ -27,14 +27,26 @@ class Sender():
         Initialize the ZMQ socket to talk to the signaling server.
         """
         self._queue = queue.Queue()
-        self._do_work = threading.Event()  # used to stop the worker thread.
         self._worker_thread = threading.Thread(target=self._worker)
+
+        # when this Event is set, the worker will cycle, check the queue and
+        # send requests. We unset this to stop the worker thread
+        self._do_work = threading.Event()
+
+        # This condition is used to prevent unnecessary cycles on the worker,
+        # we wait on the worker and notify whenever we want the worker to check
+        # the queue
+        self._not_empty = threading.Condition()
+
         self._socket = None
         self._connect()
 
     def _connect(self, reconnect=False):
         """
         Connect to the core, create a new socket and reconnect if specified.
+
+        :param reconnect: whether we need to reconnect or not
+        :type reconnect: bool
         """
         if self._socket is not None and reconnect:
             self._socket.setsockopt(zmq.LINGER, 0)
@@ -49,33 +61,38 @@ class Sender():
         Worker loop that processes the Queue of pending requests to do.
         """
         while self._do_work.is_set():
-            try:
-                request = self._queue.get(block=False)
-                self._send_request(request)
-            except queue.Empty:
-                pass
-            time.sleep(0.01)
+            with self._not_empty:
+                try:
+                    self._not_empty.wait()
+                    request = self._queue.get(block=False)
+                    self._send_request(request)
+                except queue.Empty:
+                    pass
 
         print("Sender: thread stopped.")
 
     def start(self):
         """
-        Start the Signaler worker.
+        Start the worker.
         """
         self._do_work.set()
         self._worker_thread.start()
 
     def stop(self):
         """
-        Stop the Signaler worker.
+        Stop the worker.
         """
         self._do_work.clear()
+        with self._not_empty:
+            self._not_empty.notify()
 
     def send(self, cmd):
         """
         Queue the command to send asap.
         """
         self._queue.put(cmd)
+        with self._not_empty:
+            self._not_empty.notify()
 
     def _send_request(self, request):
         """
