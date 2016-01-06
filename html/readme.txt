@@ -8,3 +8,13 @@ commands:
     source node.env/bin/activate
 
 I'm using electron to run the app and electron-packager to build the package.
+
+
+
+Resource consumption comparison:
+
+electron html ui: 138.7 MiB ram
+cpu (on idle) @ ~0%
+
+bitmask gui: ~170 MiB ram
+cpu (idle) @ ~2%
