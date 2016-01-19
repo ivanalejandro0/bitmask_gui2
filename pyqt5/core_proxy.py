@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sender import Sender
+from sender_async import Sender
 
 
 class CoreProxy():
