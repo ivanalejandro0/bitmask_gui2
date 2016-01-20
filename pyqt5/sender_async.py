@@ -51,16 +51,16 @@ class Sender():
         :return: unique identifier for the command sent
         :rtype: bytes
         """
-        print("Sender: sending: {0}".format(cmd))
+        # uid = str(uuid.uuid4()).encode()  # nicer looking uuid for print
         uid = uuid.uuid4().bytes
-        request = [uid]
+        request = [uid, b'']  # message format used by txzmq on the core
         request.extend(cmd)
         self._socket.send_multipart(request)
         self._requests[uid] = {
             'request': cmd,
             'response': None,
         }
-        print("Sender: command id: {0}".format(uid))
+        print("Sender: sending: {0}".format(request))
         return uid
 
     def start(self):
