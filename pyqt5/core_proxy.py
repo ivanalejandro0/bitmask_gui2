@@ -14,6 +14,7 @@ class CoreProxy():
         self._sender.start()
 
     def stop(self):
+        self._sender.send([b'shutdown'])
         self._sender.stop()
 
     def core_get_version(self):

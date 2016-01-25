@@ -4,6 +4,7 @@
 import signal
 import sys
 
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QWidget
 
 from core_proxy import CoreProxy
@@ -21,6 +22,10 @@ class Main(QWidget):
 
         self._core_proxy = CoreProxy()
 
+        self._response_poller = QTimer()
+        self._response_poller.timeout.connect(self._check_core_responses)
+        self._response_poller.start(500)  # 1/2 sec
+
     def connect_ui(self):
         self.ui.pbLogin.clicked.connect(self.user_login)
         self.ui.pbLogout.clicked.connect(self.user_logout)
@@ -32,6 +37,9 @@ class Main(QWidget):
         self.ui.pbMailStart.clicked.connect(self.mail_start)
         self.ui.pbMailStop.clicked.connect(self.mail_stop)
         self.ui.pbMailStatus.clicked.connect(self.mail_status)
+
+    def _check_core_responses(self):
+        print("TODO: check core responses")
 
     def user_login(self):
         print("[UI] User: login")
@@ -68,6 +76,19 @@ class Main(QWidget):
     def mail_stop(self):
         print("[UI] Mail: stop")
         # self._core_proxy.mail_stop()
+
+    def core_start(self):
+        # TODO: this should run a subprocess for the core
+        print("[UI] Core: start - NOT IMPLEMENTED")
+        # self._core_proxy.core_start()
+
+    def core_status(self):
+        print("[UI] Core: status")
+        self._core_proxy.core_get_status()
+
+    def core_stop(self):
+        print("[UI] Core: stop")
+        self._core_proxy.core_stop()
 
     def closeEvent(self, event):
         print("[UI] closeEvent")
