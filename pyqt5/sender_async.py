@@ -139,12 +139,12 @@ class Sender():
     def get_response(self, uid):
         """
         Return the response for the specified uid.
-        Return None if no response is arrived yet or if the specified uid does
-        not exist.
+        Return None if no response is arrived yet.
+
+        :raise KeyError: if the specified uid does not exist.
 
         :param uid: the uid for the request to get the response from.
         :type uid: bytes
         """
-        req = self._requests.get(uid)
-        if req is not None:
-            return req.get('response')
+        req = self._requests[uid]  # this raises KeyError if we don't have such uid
+        return req.get('response')
