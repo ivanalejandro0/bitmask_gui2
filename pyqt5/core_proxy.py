@@ -21,7 +21,7 @@ class CoreProxy():
         pass
 
     def core_get_status(self):
-        pass
+        return self._sender.send([b'status'])
 
     def core_get_stats(self):
         pass
@@ -54,7 +54,7 @@ class CoreProxy():
     #     pass
 
     def mail_status(self):
-        self._sender.send([b'mail', b'status'])
+        return self._sender.send([b'mail', b'status'])
 
     def mail_get_imap_token(self):
         self._sender.send([b'mail', b'get_imap_token'])
@@ -73,3 +73,6 @@ class CoreProxy():
 
     # def eip_status(self):
     #     self._sender.send([b'eip', b'status'])
+
+    def get_response(self, uid):
+        return self._sender.get_response(uid)

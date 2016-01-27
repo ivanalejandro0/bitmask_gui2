@@ -25,6 +25,7 @@ class Sender():
         """
         Initialize the ZMQ socket to talk to the signaling server.
         """
+        # TODO, put a limit to this, we keep track of everything right now
         self._requests = {}
 
         self._queue = queue.Queue()
@@ -116,7 +117,7 @@ class Sender():
             reply = client.recv_multipart(zmq.NOBLOCK)
             print("Received:", reply)
             ruid = reply[0]
-            self._requests[ruid]['response'] = reply[1]
+            self._requests[ruid]['response'] = reply[2]
 
     def _worker(self):
         """
@@ -146,4 +147,4 @@ class Sender():
         """
         req = self._requests.get(uid)
         if req is not None:
-            return req[uid].get('response')
+            return req.get('response')

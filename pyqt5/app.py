@@ -22,9 +22,11 @@ class Main(QWidget):
 
         self._core_proxy = CoreProxy()
 
-        self._response_poller = QTimer()
+        self._who_to_call = {}
+
+        self._response_poller = QTimer(self)
         self._response_poller.timeout.connect(self._check_core_responses)
-        self._response_poller.start(500)  # 1/2 sec
+        self._response_poller.start(100)  # 1/2 sec
 
     def connect_ui(self):
         self.ui.pbLogin.clicked.connect(self.user_login)
@@ -38,8 +40,21 @@ class Main(QWidget):
         self.ui.pbMailStop.clicked.connect(self.mail_stop)
         self.ui.pbMailStatus.clicked.connect(self.mail_status)
 
+        self.ui.pbCoreStatus.clicked.connect(self.core_status)
+
     def _check_core_responses(self):
-        print("TODO: check core responses")
+        try:
+            uid, callme = self._who_to_call.popitem()
+        except KeyError:  # dict empty
+            return
+        except Exception as e:
+            print("Unexpected error: {0!r}".format(e))
+
+        r = self._core_proxy.get_response(uid)
+        if r is not None:
+            callme(r)
+        else:
+            self._who_to_call[uid] = callme
 
     def user_login(self):
         print("[UI] User: login")
@@ -69,13 +84,18 @@ class Main(QWidget):
         print("[UI] Mail: start")
         # self._core_proxy.mail_start()
 
-    def mail_status(self):
-        print("[UI] Mail: status")
-        # self._core_proxy.mail_status()
-
     def mail_stop(self):
         print("[UI] Mail: stop")
         # self._core_proxy.mail_stop()
+
+    def mail_status(self):
+        print("[UI] Mail: status")
+        ruid = self._core_proxy.mail_status()
+        self._on(ruid, self._update_mail_status)
+
+    def _update_mail_status(self, data):
+        print("[UI] mail status: {0!r}".format(data))
+        self.ui.lblMailStatus.setText(data.decode('utf-8'))
 
     def core_start(self):
         # TODO: this should run a subprocess for the core
@@ -84,7 +104,19 @@ class Main(QWidget):
 
     def core_status(self):
         print("[UI] Core: status")
-        self._core_proxy.core_get_status()
+        ruid = self._core_proxy.core_get_status()
+        self._on(ruid, self._update_core_status)
+
+    def _on(self, uid, callme):
+        """
+        On given uid ready, call callme
+        """
+        print("Scheduled uid, callable: {0!r}".format((uid, callme)))
+        self._who_to_call[uid] = callme
+
+    def _update_core_status(self, data):
+        print("[UI] core status: {0!r}".format(data))
+        self.ui.lblCoreStatus.setText(data.decode('utf-8'))
 
     def core_stop(self):
         print("[UI] Core: stop")
