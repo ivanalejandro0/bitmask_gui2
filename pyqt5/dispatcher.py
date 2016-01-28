@@ -4,7 +4,7 @@
 from sender_async import Sender
 
 
-class CoreProxy():
+class CommandDispatcher():
     """
     This is a remote interface to interact with the bitmask core daemon.
     """

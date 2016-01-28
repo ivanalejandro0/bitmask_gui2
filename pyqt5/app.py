@@ -7,7 +7,7 @@ import sys
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QWidget
 
-from core_proxy import CoreProxy
+from dispatcher import CommandDispatcher
 from ui_main import Ui_Main
 
 
@@ -20,13 +20,18 @@ class Main(QWidget):
         self.connect_ui()
         self.show()
 
-        self._core_proxy = CoreProxy()
+        self._dispatcher = CommandDispatcher()
 
         self._who_to_call = {}
 
         self._response_poller = QTimer(self)
         self._response_poller.timeout.connect(self._check_core_responses)
         self._response_poller.start(100)  # milliseconds
+
+    def closeEvent(self, event):
+        print("[UI] closeEvent")
+        self._dispatcher.stop()
+        QWidget.closeEvent(self, event)
 
     def connect_ui(self):
         self.ui.pbLogin.clicked.connect(self.user_login)
@@ -51,7 +56,8 @@ class Main(QWidget):
 
     def _check_core_responses(self):
         """
-        Check if the core has responses for us and act inconsequence.
+        Check if the core has responses for us and call the specified callable
+        if it has.
         """
         try:
             uid, callme = self._who_to_call.popitem()
@@ -61,7 +67,7 @@ class Main(QWidget):
             print("Unexpected error: {0!r}".format(e))
 
         try:
-            r = self._core_proxy.get_response(uid)
+            r = self._dispatcher.get_response(uid)
         except KeyError:  # no such uid
             return
 
@@ -75,37 +81,37 @@ class Main(QWidget):
         print("[UI] User: login")
         username = self.ui.leUsername.text()
         password = self.ui.lePassword.text()
-        self._core_proxy.user_login(username, password)
+        self._dispatcher.user_login(username, password)
 
     def user_logout(self):
         print("[UI] User: logout")
         username = self.ui.leUsername.text()
         password = self.ui.lePassword.text()
-        self._core_proxy.user_logout(username, password)
+        self._dispatcher.user_logout(username, password)
 
     def eip_start(self):
         print("[UI] EIP: start")
-        self._core_proxy.eip_start()
+        self._dispatcher.eip_start()
 
     # def eip_status(self):
     #     print("[UI] EIP: status")
-    #     self._core_proxy.eip_status()
+    #     self._dispatcher.eip_status()
 
     def eip_stop(self):
         print("[UI] EIP: stop")
-        self._core_proxy.eip_stop()
+        self._dispatcher.eip_stop()
 
     def mail_start(self):
         print("[UI] Mail: start")
-        # self._core_proxy.mail_start()
+        # self._dispatcher.mail_start()
 
     def mail_stop(self):
         print("[UI] Mail: stop")
-        # self._core_proxy.mail_stop()
+        # self._dispatcher.mail_stop()
 
     def mail_status(self):
         print("[UI] Mail: status")
-        ruid = self._core_proxy.mail_status()
+        ruid = self._dispatcher.mail_status()
         self._on(ruid, self._update_mail_status)
 
     def _update_mail_status(self, data):
@@ -115,11 +121,11 @@ class Main(QWidget):
     def core_start(self):
         # TODO: this should run a subprocess for the core
         print("[UI] Core: start - NOT IMPLEMENTED")
-        # self._core_proxy.core_start()
+        # self._dispatcher.core_start()
 
     def core_status(self):
         print("[UI] Core: status")
-        ruid = self._core_proxy.core_get_status()
+        ruid = self._dispatcher.core_get_status()
         self._on(ruid, self._update_core_status)
 
     def _update_core_status(self, data):
@@ -128,13 +134,7 @@ class Main(QWidget):
 
     def core_stop(self):
         print("[UI] Core: stop")
-        self._core_proxy.core_shutdown()
-
-    def closeEvent(self, event):
-        print("[UI] closeEvent")
-        self._core_proxy.stop()
-        # event.accept()
-        QWidget.closeEvent(self, event)
+        self._dispatcher.core_shutdown()
 
 
 if __name__ == '__main__':

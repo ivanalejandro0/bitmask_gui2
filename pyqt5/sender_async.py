@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# This is implemented using ROUTER/DEALER zmq sockets, they can communicate
+# asynchronously and many requests can be sent as well as receive many
+# responses at any time.
+# We are keeping track of received responses to be checked at any time the user
+# wants to.
+
 import queue
 import threading
 import uuid
@@ -146,5 +153,6 @@ class Sender():
         :param uid: the uid for the request to get the response from.
         :type uid: bytes
         """
-        req = self._requests[uid]  # this raises KeyError if we don't have such uid
+        # this raises KeyError if we don't have such uid
+        req = self._requests[uid]
         return req.get('response')

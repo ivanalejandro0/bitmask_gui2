@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# This is implemented using REQ/REP zmq sockets, they block waiting for
+# response so a queue is needed to send all the responses sequentially and a
+# request cannot be sent until a response from a previous request is received.
+# For this to work well, the REP socket needs to respond 'ok' to each response
+# and later on use a different REP/REQ combination to handle responses.
+
 import queue
 import threading
 import time
@@ -11,9 +18,6 @@ class Sender():
     """
     Message sender running in a thread, it sends messages to the bitmask
     daemon.
-
-    NOTE: right now this is not very well thought, just the basics to get a
-    simple zmq non twistedy message sender.
     """
     # Total wait time == POLL_TIMEOUT * POLL_TRIES (ms)
     POLL_TRIES = 5
