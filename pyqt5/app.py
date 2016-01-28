@@ -10,6 +10,10 @@ from PyQt5.QtWidgets import QApplication, QWidget
 from dispatcher import CommandDispatcher
 from ui_main import Ui_Main
 
+# TODO: implement timeouts for calls
+# if we send a command and don't have a response on X time, we can assume that
+# the the core is not alive (or not reachable)
+
 
 class Main(QWidget):
     def __init__(self):
@@ -81,7 +85,12 @@ class Main(QWidget):
         print("[UI] User: login")
         username = self.ui.leUsername.text()
         password = self.ui.lePassword.text()
-        self._dispatcher.user_login(username, password)
+        ruid = self._dispatcher.user_login(username, password)
+        self._on(ruid, self._update_login_status)
+
+    def _update_login_status(self, data):
+        print("[UI] login status: {0!r}".format(data))
+        self.ui.lblLoginStatus.setText(data.decode('utf-8'))
 
     def user_logout(self):
         print("[UI] User: logout")
