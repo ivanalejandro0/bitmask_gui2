@@ -143,6 +143,8 @@ class Sender():
             self._process_queue()
             self._receive_response(poll)
 
+        self._disconnect()
+
     def get_response(self, uid):
         """
         Return the response for the specified uid.
